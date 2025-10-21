@@ -26,18 +26,26 @@ function checkAutoLogin() {
         document.getElementById('password').value = savedPassword;
         document.getElementById('rememberMe').checked = true;
         
-        // Auto login
+        // Auto login after 1 second
         setTimeout(() => {
-            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
-        }, 500);
+            const form = document.getElementById('loginForm');
+            if (form) {
+                form.dispatchEvent(new Event('submit', { cancelable: true }));
+            }
+        }, 1000);
     }
 }
 
 // Login user
 async function loginUser(email, password) {
     try {
+        console.log('Starting login...');
+        
         const employeeData = await SheetsAPI.getSheetData('employees');
+        console.log('Employee data loaded:', employeeData.length);
+        
         const customerData = await SheetsAPI.getSheetData('vi_customers');
+        console.log('Customer data loaded:', customerData.length);
         
         let user = null;
         for (let i = 1; i < employeeData.length; i++) {
@@ -73,22 +81,31 @@ async function loginUser(email, password) {
         
         const customers = [];
         for (let i = 1; i < customerData.length; i++) {
-            customers.push({
-                id: customerData[i][0],
-                name: customerData[i][1],
-                phone: customerData[i][2],
-                matchingNumber: customerData[i][3],
-                currentOperator: customerData[i][4],
-                status: customerData[i][5],
-                assignedTo: customerData[i][6],
-                addedBy: customerData[i][7],
-                lastCallDate: customerData[i][8],
-                notes: customerData[i][9],
-                important: customerData[i][10] === 'TRUE',
-                createdDate: customerData[i][11],
-                completedDate: customerData[i][12]
-            });
+            if (customerData[i] && customerData[i].length > 0) {
+                customers.push({
+                    id: customerData[i][0] || '',
+                    name: customerData[i][1] || '',
+                    phone: customerData[i][2] || '',
+                    matchingNumber: customerData[i][3] || '',
+                    currentOperator: customerData[i][4] || '',
+                    status: customerData[i][5] || 'Not Connected',
+                    assignedTo: customerData[i][6] || '',
+                    addedBy: customerData[i][7] || '',
+                    lastCallDate: customerData[i][8] || '',
+                    notes: customerData[i][9] || '',
+                    important: customerData[i][10] === 'TRUE',
+                    createdDate: customerData[i][11] || '',
+                    completedDate: customerData[i][12] || ''
+                });
+            }
         }
+        
+        console.log('Login successful!', {
+            user: user.name,
+            role: user.role,
+            customers: customers.length,
+            users: users.length
+        });
         
         return {
             success: true,
@@ -99,7 +116,7 @@ async function loginUser(email, password) {
         
     } catch (error) {
         console.error('Login error:', error);
-        return { success: false, message: error.toString() };
+        return { success: false, message: 'Failed to load data: ' + error.message };
     }
 }
 
@@ -113,15 +130,22 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const password = document.getElementById('password').value;
     const rememberMe = document.getElementById('rememberMe').checked;
 
-    showModal('⏳', 'Logging In', 'Please wait...');
+    showModal('⏳', 'Logging In', 'Please wait while we load your data...');
 
     try {
         const result = await loginUser(email, password);
+        
+        console.log('Login result:', result);
         
         if (result.success) {
             currentUser = result.user;
             allCustomers = result.customers || [];
             allUsers = result.users || [];
+            
+            console.log('Data loaded successfully:', {
+                customers: allCustomers.length,
+                users: allUsers.length
+            });
             
             // Save login if remember me is checked
             if (rememberMe) {
@@ -147,11 +171,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
                 loadEmployeeStats();
             }
         } else {
+            closeModal();
             showModal('❌', 'Login Failed', result.message || 'Invalid email or password');
         }
     } catch (error) {
-        showModal('❌', 'Error', 'Login failed. Please check your connection and try again.');
         console.error('Login error:', error);
+        closeModal();
+        showModal('❌', 'Error', 'Login failed: ' + error.message);
     }
     
     isLoading = false;
