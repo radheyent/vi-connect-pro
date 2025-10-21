@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vi Connect Pro</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="celebration" id="celebration">🎉</div>
+
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🚀 Vi Connect Pro</h1>
+                <p>Lead Management System</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 8px; font-weight: 400;">
+                        <input type="checkbox" id="rememberMe" checked>
+                        <span>Remember me</span>
+                    </label>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainApp" class="main-container">
+        <div class="top-bar">
+            <button id="backBtn" class="back-btn">← Back</button>
+            <div style="flex: 1;"></div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+
+        <div id="empDashboard" class="page active">
+            <div class="greeting-card">
+                <div class="greeting-title">👋 Hello, <span id="empName">User</span></div>
+                <div class="greeting-date" id="greetingDate"></div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📞</div>
+                    <div class="stat-number" id="todayCallsStat">0</div>
+                    <div class="stat-label">Today's Calls</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-number" id="connectedStat">0</div>
+                    <div class="stat-label">Connected</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">☎️</div>
+                    <div class="stat-number" id="followupStat">0</div>
+                    <div class="stat-label">Follow-up</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-number" id="importantStat">0</div>
+                    <div class="stat-label">Important</div>
+                </div>
+            </div>
+
+            <div class="button-grid">
+                <button class="action-btn" data-page="empCustomers">👥<br>VIEW CUSTOMERS</button>
+                <button class="action-btn" data-page="empFollowup">☎️<br>FOLLOW-UPS</button>
+                <button class="action-btn" data-page="empPendingSale">💰<br>PENDING SALE</button>
+                <button class="action-btn" id="addCustomerBtn">➕<br>ADD CUSTOMER</button>
+                <button class="action-btn" data-page="empReports">📊<br>MY REPORTS</button>
+                <button class="action-btn" data-page="empCompleted">✅<br>COMPLETED</button>
+            </div>
+
+            <div class="section-title">📝 Recent Activity</div>
+            <div id="recentActivityList"></div>
+        </div>
+
+        <div id="empCustomers" class="page">
+            <div class="section-title">👥 Assigned Customers</div>
+            <div class="search-box">
+                <input type="text" id="searchEmpCustomers" placeholder="🔍 Search by name or phone...">
+            </div>
+            <div class="total-count" id="empCustomersCount">Total: 0 Customers</div>
+            <div id="empCustomersList"></div>
+        </div>
+
+        <div id="empFollowup" class="page">
+            <div class="section-title">☎️ Follow-up Leads</div>
+            <div id="empFollowupList"></div>
+        </div>
+
+        <div id="empPendingSale" class="page">
+            <div class="section-title">💰 Pending Sale</div>
+            <div id="empPendingSaleList"></div>
+        </div>
+
+        <div id="empReports" class="page">
+            <div class="section-title">📊 My Performance Report</div>
+            <div class="card">
+                <div style="font-size: 18px; font-weight: 800; color: #e01e37; margin-bottom: 16px;">📈 This Month Summary</div>
+                <div class="card-info" style="border-bottom: 1px solid #f0f0f0; padding: 8px 0;"><strong>☎️ Total Calls:</strong> <span id="reportTotalCalls">-</span></div>
+                <div class="card-info" style="border-bottom: 1px solid #f0f0f0; padding: 8px 0;"><strong>✅ Connected:</strong> <span id="reportConnected">-</span></div>
+                <div class="card-info" style="border-bottom: 1px solid #f0f0f0; padding: 8px 0;"><strong>😊 Interested:</strong> <span id="reportInterested">-</span></div>
+                <div class="card-info" style="border-bottom: 1px solid #f0f0f0; padding: 8px 0;"><strong>🎯 Completed:</strong> <span id="reportCompleted">-</span></div>
+                <div class="card-info" style="padding: 8px 0;"><strong>📈 Success Rate:</strong> <span id="reportSuccessRate">-</span></div>
+            </div>
+        </div>
+
+        <div id="empCompleted" class="page">
+            <div class="section-title">✅ Completed Leads</div>
+            <div id="completedLeadsList"></div>
+        </div>
+
+        <div id="adminDashboard" class="page">
+            <div class="greeting-card">
+                <div class="greeting-title">👋 Hello Admin, <span id="adminName">User</span></div>
+                <div class="greeting-date" id="greetingDateAdmin"></div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">👨‍💼</div>
+                    <div class="stat-number" id="totalEmpStat">0</div>
+                    <div class="stat-label">Employees</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📱</div>
+                    <div class="stat-number" id="activeCustomersStat">0</div>
+                    <div class="stat-label">Active Leads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎉</div>
+                    <div class="stat-number" id="completedLeadsStat">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-number" id="pendingAssignmentsStat">0</div>
+                    <div class="stat-label">Pending Assign</div>
+                </div>
+            </div>
+
+            <div class="section-title">🔧 Admin Actions</div>
+            <div class="button-grid">
+                <button class="action-btn" id="addEmployeeBtn">➕<br>ADD EMPLOYEE</button>
+                <button class="action-btn" data-page="adminAllCustomers">👥<br>MANAGE CUSTOMERS</button>
+                <button class="action-btn" data-page="adminReports">📊<br>VIEW REPORTS</button>
+                <button class="action-btn" id="backupBtn">💾<br>BACKUP DATA</button>
+            </div>
+
+            <div class="section-title">📋 Recent Activity</div>
+            <div id="adminRecentActivity"></div>
+        </div>
+
+        <div id="adminAllCustomers" class="page">
+            <div class="section-title">📋 All Customers</div>
+            <div class="search-box">
+                <input type="text" id="searchAdminCustomers" placeholder="🔍 Search by name or phone...">
+            </div>
+            <div class="total-count" id="adminCustomersCount">Total: 0 Customers</div>
+            <div id="adminCustomersList"></div>
+        </div>
+
+        <div id="adminReports" class="page">
+            <div class="section-title">📊 Employee Performance</div>
+            <div id="employeePerformanceList"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-icon" id="modalIcon">ℹ️</div>
+            <div class="modal-title" id="modalTitle">Message</div>
+            <div class="modal-message" id="modalMessage">This is a message</div>
+            <div id="modalBody"></div>
+            <div class="modal-buttons" id="modalButtons"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"></script>
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="auth.js"></script>
+    <script src="ui.js"></script>
+    <script src="employee.js"></script>
+    <script src="admin.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
