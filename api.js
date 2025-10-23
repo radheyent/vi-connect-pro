@@ -54,21 +54,33 @@ const SheetsAPI = {
     },
     
     async updateRow(sheetName, rowIndex, values) {
-        try {
-            const response = await axios.post(CONFIG.SCRIPT_URL, {
-                action: 'updateRow',
-                sheetName: sheetName,
-                rowIndex: rowIndex,
-                values: values
-            });
-            
-            if (response.data.status === 'error') {
-                throw new Error(response.data.message);
+    try {
+        console.log('Updating row:', sheetName, rowIndex);
+        
+        // Use CORS proxy for GitHub Pages
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const targetUrl = CONFIG.SCRIPT_URL;
+        
+        const response = await axios.post(proxyUrl + targetUrl, {
+            action: 'updateRow',
+            sheetName: sheetName,
+            rowIndex: rowIndex,
+            values: values
+        }, { 
+            timeout: 15000,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
             }
-            return response.data;
-        } catch (error) {
-            console.error('Error updating row:', error);
-            throw error;
+        });
+        
+        if (response.data.status === 'error') {
+            throw new Error(response.data.message);
         }
+        
+        console.log('Row updated successfully');
+        return response.data;
+    } catch (error) {
+        console.error('Error updating row:', error);
+        throw error;
     }
-};
+}
