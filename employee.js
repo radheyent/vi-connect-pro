@@ -201,13 +201,12 @@ function openCustomerDetails(customerId) {
             <div class="modal-form-group">
                 <label>Update Status</label>
                 <select id="updateStatus_${customerId}">
-                    <option value="${customer.status}" selected>${customer.status}</option>
-                    <option value="Not Connected">Not Connected</option>
-                    <option value="Not Reachable">Not Reachable</option>
-                    <option value="Follow-up">Follow-up</option>
-                    <option value="Interested">Interested</option>
-                    <option value="Not Interested">Not Interested</option>
-                    <option value="Complete">Complete</option>
+                    <option value="Not Connected" ${customer.status === 'Not Connected' ? 'selected' : ''}>Not Connected</option>
+                    <option value="Not Reachable" ${customer.status === 'Not Reachable' ? 'selected' : ''}>Not Reachable</option>
+                    <option value="Follow-up" ${customer.status === 'Follow-up' ? 'selected' : ''}>Follow-up</option>
+                    <option value="Interested" ${customer.status === 'Interested' ? 'selected' : ''}>Interested</option>
+                    <option value="Not Interested" ${customer.status === 'Not Interested' ? 'selected' : ''}>Not Interested</option>
+                    <option value="Complete" ${customer.status === 'Complete' ? 'selected' : ''}>Complete</option>
                 </select>
             </div>
             <div class="modal-form-group">
@@ -483,3 +482,4 @@ async function addNewCustomer() {
         showModal('❌', 'Error', 'Failed to add customer: ' + error.message);
     }
 }
+
