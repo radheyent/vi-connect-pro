@@ -14,4 +14,3 @@ window.addEventListener('DOMContentLoaded', function() {
 setInterval(setGreetingDate, 60000);
 
 console.log('App initialized');
-```
