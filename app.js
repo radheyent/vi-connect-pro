@@ -1,12 +1,17 @@
-// Main App Initialization
-console.log('Vi Connect Pro - Initializing...');
+console.log('Vi Connect Pro - Starting...');
 
 window.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Content Loaded');
+    console.log('DOM Loaded');
     setGreetingDate();
-    checkAutoLogin();
+    
+    // Check auto-login after 1 second
+    setTimeout(function() {
+        checkAutoLogin();
+    }, 1000);
 });
 
+// Refresh greeting every minute
 setInterval(setGreetingDate, 60000);
-console.log('App.js loaded successfully');
+
+console.log('App initialized');
 ```
